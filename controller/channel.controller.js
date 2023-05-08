@@ -54,4 +54,21 @@ const joinChannel = expressAsyncHandler(async (req, res) => {
     }
 })
 
-export { getAllChannels, getChannelById, joinChannel };
+const getAllUsersOfChannel = expressAsyncHandler(async (req, res) => {
+    const channelId = req.params.channelId;
+    const channel = await Channel.findOne({ channelId: channelId });
+
+    if(channel) {
+        const id = channel._id;
+        const users = await User.find({ channels: { $elemMatch: { channelId: id } } });
+        res.status(200).json({
+            users
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid channel id');
+    }
+})
+
+
+export { getAllChannels, getChannelById, joinChannel, getAllUsersOfChannel };

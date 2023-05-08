@@ -1,5 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import Admin from "../models/user.model.js";
+import User from "../models/user.model.js";
 import Channel from "../models/channel.model.js";
 import generateToken from "../utils/generateToken.js";
 
@@ -115,10 +116,119 @@ const updateChannel = expressAsyncHandler(async (req, res) => {
 
 });
 
+const makeModerator = expressAsyncHandler(async (req, res) => {
+  var { channelId, userEmail } = req.body;
+  const user = await User.findOne({ email: userEmail });
+  const channel = await Channel.findOne({ channelId });
+  console.log(channel);
+  channelId = channel._id.toString();
+  if(!user) {
+    res.status(400);
+    throw new Error('User does not exist');
+  } else {
+    var isMemeber = false
+    user.channels.forEach(channel => {
+      if(channel.channelId == channelId) {
+        isMemeber = true;
+      }
+    });
+  
+    if(!isMemeber) {
+      res.status(400);
+      throw new Error('User is not a member of this channel');
+    }
+
+    const isAlreadyModerator = await user.channels.find(
+      channel => channel.channelId == channelId
+    ).role == 'moderator';
+
+    if(isAlreadyModerator) {
+      res.status(400);
+      throw new Error('User is already a moderator');
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: userEmail, 'channels.channelId': channelId },
+      { $set: { 'channels.$.role': 'moderator' } },
+    );
+
+    if(updatedUser) {
+      res.status(201).json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        channels: {
+          channelId: channelId,
+          role: 'moderator'
+        }
+      })
+    } else {
+      res.status(400);
+      throw new Error('Invalid user data');
+    }
+  }
+})
+
+const demoteToMember = expressAsyncHandler(async (req, res) => {
+  var { channelId, userEmail } = req.body;
+  const user = await User.findOne({ email: userEmail });
+  const channel = await Channel.findOne({ channelId });
+  channelId = channel._id.toString();
+  if(!user) {
+    res.status(400);
+    throw new Error('User does not exist');
+  } else {
+    var isMember = false
+    user.channels.forEach(channel => {
+      if(channel.channelId == channelId) {
+        isMember = true;
+      }
+    });
+  
+    if(!isMember) {
+      res.status(400);
+      throw new Error('User is not a member of this channel');
+    }
+
+    const isAlreadyMember = await user.channels.find(
+      channel => channel.channelId == channelId
+    ).role == 'member';
+
+    if(isAlreadyMember) {
+      res.status(400);
+      throw new Error('User is already a memeber');
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: userEmail, 'channels.channelId': channelId },
+      { $set: { 'channels.$.role': 'member' } },
+    );
+
+    if(updatedUser) {
+      res.status(201).json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        channels: {
+          channelId: channelId,
+          role: 'member'
+        }
+      })
+    } else {
+      res.status(400);
+      throw new Error('Invalid user data');
+    }
+  }
+})
+
 
 export {
   loginAdmin,
   registerAdmin,
   createChannel,
-  updateChannel
+  updateChannel,
+  makeModerator,
+  demoteToMember
 }

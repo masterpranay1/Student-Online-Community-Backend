@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router()
 
-import { loginAdmin, registerAdmin, createChannel, updateChannel } from '../controller/admin.controller.js';
+import { loginAdmin, registerAdmin, createChannel, updateChannel, makeModerator, demoteToMember } from '../controller/admin.controller.js';
 import { protectAdmin } from '../middleware/auth.middleware.js';
 
 router.post('/register', 
@@ -20,6 +20,16 @@ router.post('/createChannel',
 router.post('/updateChannel',
   protectAdmin,
   updateChannel
+)
+
+router.put('/makeModerator',
+  protectAdmin,
+  makeModerator
+)
+
+router.put('/demoteToMember', 
+  protectAdmin,
+  demoteToMember
 )
 
 export default router;
