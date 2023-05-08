@@ -12,6 +12,12 @@ const GroupSchema = mongoose.Schema({
   channel: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+    enum: ['public', 'private'],
+    default: 'public',
   }
 },
 {

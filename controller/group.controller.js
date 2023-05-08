@@ -9,7 +9,7 @@ import Group from "../models/group.model.js";
 // @access Private
 
 const createGroup = expressAsyncHandler(async (req, res) => {
-  const { name, groupId, channelId } = req.body;
+  const { name, groupId, channelId, type } = req.body;
 
   const groupExist = await Group.findOne({ groupId });
   if(groupExist) {
@@ -22,13 +22,19 @@ const createGroup = expressAsyncHandler(async (req, res) => {
       throw new Error('Channel does not exist');
     } 
     const actualChannelId = channel._id;
-    const group = await Group.create({ name, groupId, channel: actualChannelId });
+    const groupType = type == undefined ? 'public' : type;
+    const group = await Group.create({ 
+      name, groupId,
+      channel: actualChannelId,
+      type: groupType
+    });
     if(group) {
       res.status(201).json({
         _id: group._id,
         name: group.name,
         groupId: group.groupId,
-        channel: group.channel
+        channel: group.channel,
+        type: group.type
       });
     } else {
       res.status(400);
@@ -42,7 +48,7 @@ const createGroup = expressAsyncHandler(async (req, res) => {
 // @access Private
 
 const updateGroup = expressAsyncHandler(async (req, res) => {
-  const { name, groupId, channelId } = req.body;
+  const { name, groupId, channelId, type } = req.body;
   const groupExist = await Group.findOne({ groupId });
   if(!groupExist) {
     res.status(400);
@@ -54,18 +60,21 @@ const updateGroup = expressAsyncHandler(async (req, res) => {
       throw new Error('Channel does not exist');
     } 
     const actualChannelId = channel._id;
+    const groupType = type == undefined ? 'public' : type;
     const updateGroup = await Group.findOneAndUpdate({
       groupId: groupId,
     }, {
       name: name,
-      channel: actualChannelId
+      channel: actualChannelId,
+      type: groupType
     })
     if(updateGroup) {
       res.status(201).json({
         _id: updateGroup._id,
         name: name,
         groupId: updateGroup.groupId,
-        channel: updateGroup.channel
+        channel: updateGroup.channel,
+        type: groupType
       });
     } else {
       res.status(400);
