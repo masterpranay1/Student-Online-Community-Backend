@@ -4,8 +4,21 @@ import Channel from "../models/channel.model.js";
 
 const getAllChannels = expressAsyncHandler(async (req, res) => {
     const channels = await Channel.find({});
-    console.log(channels);
-    res.json(channels);
+    const channelsId = channels.map(channel => channel.channelId);
+    if(channels) {
+        res.status(200).json({
+            channelsId
+        });
+    }
 })
 
-export { getAllChannels };
+const getChannelById = expressAsyncHandler(async (req, res) => {
+    const channel = await Channel.findOne({ channelId: req.params.channelId });
+    if(channel) {
+        res.status(200).json({
+            channel
+        });
+    }
+})
+
+export { getAllChannels, getChannelById };
