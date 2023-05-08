@@ -1,5 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import Channel from "../models/channel.model.js";
+import User from "../models/user.model.js"
 
 
 const getAllChannels = expressAsyncHandler(async (req, res) => {
@@ -21,4 +22,32 @@ const getChannelById = expressAsyncHandler(async (req, res) => {
     }
 })
 
-export { getAllChannels, getChannelById };
+const joinChannel = expressAsyncHandler(async (req, res) => {
+    if (1) {
+        const channel = await Channel.findOne({ channelId: req.body.channelId });
+        if (channel) {
+            const user = await User.findOne({ _id: req.user._id });
+            if(!user) {
+                res.status(404);
+                throw new Error('User not found');
+            } else {
+                const channelExist = user.channels.find(channel => channel == req.body.channelId);
+                if(channelExist) {
+                    res.status(400);
+                    throw new Error('User already joined this channel');
+                } else {
+                    user.channels.push(req.body.channelId);
+                    await user.save();
+                    res.status(200).json({
+                        message: 'User joined the channel'
+                    });
+                }
+            }
+        }
+    } else {
+        res.status(400);
+        throw new Error('Invalid channel id');
+    }
+})
+
+export { getAllChannels, getChannelById, joinChannel };

@@ -62,7 +62,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 // @access Public
 
 const getAllUsers = expressAsyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({ role: 'user' }).populate('channels');
   if(users) {
     res.status(200).json(users)
   } else {

@@ -24,6 +24,12 @@ const userSchema = mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    channels: [
+      {
+        type: String,
+        ref: 'Channel'
+      }
+    ]
   },
   {
     timestamps: true,
