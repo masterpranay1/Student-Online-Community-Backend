@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router()
 
-import { loginAdmin, registerAdmin } from '../controller/admin.controller.js';
+import { loginAdmin, registerAdmin, createChannel } from '../controller/admin.controller.js';
 import { protectAdmin } from '../middleware/auth.middleware.js';
 
 router.post('/register', 
@@ -14,9 +14,7 @@ router.post('/login',
 
 router.post('/createChannel',
   protectAdmin,
-  (req, res) => {
-    res.send('create channel')
-  }
+  createChannel
 )
 
 export default router;
