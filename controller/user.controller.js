@@ -57,7 +57,22 @@ const loginUser = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc   Get all users
+// @route  GET /api/users
+// @access Public
+
+const getAllUsers = expressAsyncHandler(async (req, res) => {
+  const users = await User.find({});
+  if(users) {
+    res.status(200).json(users)
+  } else {
+    res.status(404);
+    throw new Error('No users found');
+  }
+})
+
 export {
   registerUser,
   loginUser,
+  getAllUsers
 }
