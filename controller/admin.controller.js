@@ -65,7 +65,6 @@ const createChannel = expressAsyncHandler(async (req, res) => {
   const { channelId, name, description, imageUrl } = req.body;
 
   const channelExist = await Channel.findOne({ channelId });
-
   if(channelExist) {
     res.status(400);
     throw new Error('Channel already exists');
@@ -87,9 +86,39 @@ const createChannel = expressAsyncHandler(async (req, res) => {
 
 })
 
+// @desc Update the channel
+// @route POST /api/admin/updateChannel
+// @access Private - Admin
+
+const updateChannel = expressAsyncHandler(async (req, res) => {
+  const { channelId, name, description, imageUrl } = req.body;
+  const channelExist = await Channel.findOne({ channelId });
+
+  if(!channelExist) {
+    res.statuschannelExist
+    throw new Error('Channel does not exist');
+  }
+
+  const channel = await Channel.findOneAndUpdate({ channelId }, { name, description, imageUrl });
+  if(channel) {
+    res.status(201).json({
+      _id: channel._id,
+      channelId: channel.channelId,
+      name: channel.name,
+      description: channel.description,
+      imageUrl: channel.imageUrl
+    })
+  } else {
+    res.status(400);
+    throw new Error('Invalid channel data');
+  }
+
+});
+
 
 export {
   loginAdmin,
   registerAdmin,
-  createChannel
+  createChannel,
+  updateChannel
 }
