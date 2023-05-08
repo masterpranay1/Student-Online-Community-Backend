@@ -23,20 +23,24 @@ const getChannelById = expressAsyncHandler(async (req, res) => {
 })
 
 const joinChannel = expressAsyncHandler(async (req, res) => {
-    if (1) {
+    if (req.body.channelId) {
         const channel = await Channel.findOne({ channelId: req.body.channelId });
         if (channel) {
             const user = await User.findOne({ _id: req.user._id });
+            const channelId = channel._id;
             if(!user) {
                 res.status(404);
                 throw new Error('User not found');
             } else {
-                const channelExist = user.channels.find(channel => channel == req.body.channelId);
+                const channelExist = user.channels.find(channel => channel.channelId == channelId);
                 if(channelExist) {
                     res.status(400);
                     throw new Error('User already joined this channel');
                 } else {
-                    user.channels.push(req.body.channelId);
+                    user.channels.push({
+                        channelId: channelId,
+                        role: 'member'
+                    });
                     await user.save();
                     res.status(200).json({
                         message: 'User joined the channel'

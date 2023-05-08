@@ -26,8 +26,15 @@ const userSchema = mongoose.Schema(
     },
     channels: [
       {
-        type: String,
-        ref: 'Channel'
+        channelId: {
+          type: String,
+          ref: 'Channel',
+        },
+        role: {
+          type: String,
+          enum: ['admin', 'member', 'moderator'],
+          default: 'member',
+        }
       }
     ]
   },
