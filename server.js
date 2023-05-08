@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import connectDB from './config/db.js';
 import userRoutes from './routes/user.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import channelRoutes from './routes/channel.routes.js';
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -50,6 +51,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/channels', channelRoutes);
 
 
 app.use(notFound);
