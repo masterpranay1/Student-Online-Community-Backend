@@ -102,7 +102,7 @@ const isUserInChannel = expressAsyncHandler(async (req, res) => {
     throw new Error('Channel not found');
   }
 
-  const user = await User.findOne({ _id, 'channels.channelId': channelId });
+  const user = await User.findOne({ _id, 'channels.channelId': channel._id });
   if(user) {
     res.status(200).json({ isInChannel: true })
   } else {
