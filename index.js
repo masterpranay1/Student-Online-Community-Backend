@@ -36,7 +36,8 @@ const corsOptions = {
     "https://student-online-community-frontend.vercel.app/auth/register",
     "https://student-online-community-frontend.vercel.app/auth/admin/login",
     "https://student-online-community-frontend.vercel.app/channels",
-    "https://student-online-community-frontend.vercel.app/channelDashboard"
+    "https://student-online-community-frontend.vercel.app/channelDashboard",
+    "*"
   ],
   credentials: true,
 }
