@@ -30,8 +30,7 @@ const corsOptions = {
   origin: [
     "http://192.168.100.214:5173",
     "http://localhost:5173",
-    "https://student-online-community-frontend.vercel.app:5173",
-    "*"
+    "https://student-online-community-frontend.vercel.app",
   ],
   credentials: true,
 }
