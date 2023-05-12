@@ -58,6 +58,22 @@ const loginUser = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc   Logout user
+// @route  POST /api/users/logout
+// @access Private
+
+const logoutUser = expressAsyncHandler(async (req, res) => {
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV !== 'development' ? 'none' : 'lax',
+    expires: new Date(0)
+  }).send({
+    message: 'Logged out',
+    success: true
+  });
+})
+
 // @desc   Get all users
 // @route  GET /api/users
 // @access Public
@@ -117,5 +133,6 @@ export {
   loginUser,
   getAllUsers,
   getUserById,
-  isUserInChannel
+  isUserInChannel,
+  logoutUser
 }
