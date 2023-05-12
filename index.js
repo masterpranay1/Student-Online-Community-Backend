@@ -30,13 +30,7 @@ const corsOptions = {
   origin: [
     "http://192.168.100.214:5173",
     "http://localhost:5173",
-    "https://student-online-community-frontend.vercel.app",
-    "https://student-online-community-frontend.vercel.app/auth/",
-    "https://student-online-community-frontend.vercel.app/auth/login",
-    "https://student-online-community-frontend.vercel.app/auth/register",
-    "https://student-online-community-frontend.vercel.app/auth/admin/login",
-    "https://student-online-community-frontend.vercel.app/channels",
-    "https://student-online-community-frontend.vercel.app/channelDashboard",
+    "https://student-online-community-frontend.vercel.app:5173",
     "*"
   ],
   credentials: true,
