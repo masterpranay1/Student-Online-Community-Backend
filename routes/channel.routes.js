@@ -1,19 +1,25 @@
-import express from 'express'
-import { protectUser } from '../middleware/auth.middleware.js'
-import { getAllChannels, getChannelById, joinChannel, getAllUsersOfChannel } from '../controller/channel.controller.js'
-import { getAllGroups } from '../controller/group.controller.js'
+import express from 'express';
+import { protectUser } from '../middleware/auth.middleware.js';
+
+import channelController from '../controller/channel.controller.js';
+import groupController from '../controller/group.controller.js';
 
 const router = express.Router();
 
-router.get('/getAllChannels',  getAllChannels);
-router.get('/getChannelById/:channelId',  getChannelById);
+router.get('/getAllChannels', channelController.getAllChannels);
+router.get('/getChannelById/:channelId', channelController.getChannelById);
 
-router.post('/joinChannel', protectUser,  joinChannel);
+router.post('/joinChannel', protectUser, channelController.joinChannel);
 
-router.get('/getUsersOfChannel/:channelId',
-  getAllUsersOfChannel
-)
+router.get(
+  '/getUsersOfChannel/:channelId',
+  channelController.getUsersOfChannel
+);
 
-router.get('/getAllGroups/:channelId', protectUser, getAllGroups)
+router.get(
+  '/getAllGroups/:channelId',
+  protectUser,
+  groupController.getAllGroups
+);
 
 export default router;

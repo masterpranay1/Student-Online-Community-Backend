@@ -1,46 +1,21 @@
 import express from 'express';
-const router = express.Router()
+const router = express.Router();
 
-import { loginAdmin, registerAdmin, createChannel, updateChannel, makeModerator, demoteToMember } from '../controller/admin.controller.js';
-import { createGroup, updateGroup } from '../controller/group.controller.js';
+import adminController from '../controller/admin.controller.js';
+import groupController from '../controller/group.controller.js';
+
 import { protectAdmin } from '../middleware/auth.middleware.js';
 
-router.post('/register', 
-  registerAdmin
-)
+router.post('/register', adminController.registerAdmin);
+router.post('/login', adminController.loginAdmin);
 
-router.post('/login',
-  loginAdmin
-)
+router.post('/createChannel', protectAdmin, adminController.createChannel);
+router.post('/updateChannel', protectAdmin, adminController.updateChannel);
 
-router.post('/createChannel',
-  protectAdmin,
-  createChannel
-)
+router.put('/makeModerator', protectAdmin, adminController.makeModerator);
+router.put('/demoteToMember', protectAdmin, adminController.demoteToMember);
 
-router.post('/updateChannel',
-  protectAdmin,
-  updateChannel
-)
-
-router.put('/makeModerator',
-  protectAdmin,
-  makeModerator
-)
-
-router.put('/demoteToMember', 
-  protectAdmin,
-  demoteToMember
-)
-
-router.post('/createGroup', 
-  protectAdmin,
-  createGroup
-)
-
-router.put('/updateGroup',
-  protectAdmin,
-  updateGroup
-)
+router.post('/createGroup', protectAdmin, groupController.createGroup)
+router.put('/updateGroup', protectAdmin, groupController.updateGroup);
 
 export default router;

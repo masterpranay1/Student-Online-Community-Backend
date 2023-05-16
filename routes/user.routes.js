@@ -1,36 +1,21 @@
-import express from "express";
-import { registerUser, loginUser, getAllUsers, getUserById, isUserInChannel, logoutUser } from "../controller/user.controller.js";
-import { protectUser } from "../middleware/auth.middleware.js";
+import express from 'express';
+import { protectUser } from '../middleware/auth.middleware.js';
+
+import userController from '../controller/user.controller.js';
 
 const router = express.Router();
 
+router.post('/register', userController.registerUser);
+router.post('/login', userController.loginUser);
+router.post('/logout', protectUser, userController.logoutUser);
 
-router.post('/register', 
-  registerUser
+router.get('/getAllUsers', userController.getAllUsers);
+router.get('/getUserById/:userId', protectUser, userController.getUserById);
+
+router.get(
+  '/isUserInChannel/:channelId',
+  protectUser,
+  userController.isUserInChannel
 );
-
-router.post('/login', 
-  loginUser
-);
-
-router.post('/logout',
-  protectUser,
-  logoutUser
-)
-
-router.get('/getAllUsers',
-  getAllUsers
-)
-
-router.get('/getUserById/:userId', 
-  protectUser,
-  getUserById
-)
-
-router.get('/isUserInChannel/:channelId',
-  protectUser,
-  isUserInChannel
-)
-
 
 export default router;
