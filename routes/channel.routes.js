@@ -13,7 +13,7 @@ router.post('/joinChannel', protectUser, channelController.joinChannel);
 
 router.get(
   '/getUsersOfChannel/:channelId',
-  channelController.getUsersOfChannel
+  channelController.getAllUsersOfChannel
 );
 
 router.get(
