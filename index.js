@@ -5,6 +5,7 @@ import userRoutes from './routes/user.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import channelRoutes from './routes/channel.routes.js';
 import moderatorRoutes from './routes/moderator.routes.js';
+import groupRoutes from './routes/group.routes.js';
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -58,6 +59,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/channels', channelRoutes);
 app.use('/api/moderator', moderatorRoutes);
+app.use('/api/group', groupRoutes);
 
 
 app.use(notFound);

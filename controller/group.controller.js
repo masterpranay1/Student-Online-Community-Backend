@@ -1,6 +1,7 @@
 import expressAsyncHandler from 'express-async-handler';
 import Admin from '../models/user.model.js';
 import User from '../models/user.model.js';
+import Chat from '../models/chat.model.js';
 import Channel from '../models/channel.model.js';
 import Group from '../models/group.model.js';
 
@@ -110,6 +111,32 @@ class GroupController {
       }
     }
   });
+
+  // @desc Get all chats
+  // @route GET /api/group/getAllChats
+  // @access Private to users and admin
+
+  getAllChats = expressAsyncHandler(async (req, res) => {
+    const { groupId } = req.params;
+
+    const groupExist = await Group.find({ groupId });
+    if (!groupExist) {
+      res.status(400);
+      throw new Error('Group does not exists');
+    } else {
+      const chats = await Chat.find({ group: groupExist._id });
+      if (chats) {
+        res.status(201).json({
+          message: 'Chats fetched successfully',
+          status: 'ok',
+          chats: chats,
+        });
+      } else {
+        res.status(400);
+        throw new Error('Invalid group data');
+      }
+    }
+  })
 }
 
 export default new GroupController();
