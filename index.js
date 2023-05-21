@@ -13,6 +13,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { notFound, errorHandler } from './middleware/error.middleware.js';
 import dotenv from 'dotenv';
+import { listenForChannel } from './sockets/index.js';
 dotenv.config();
 
 const app = express();
@@ -44,12 +45,14 @@ app.use(morgan('dev'));
 connectDB();
 
 io.on('connection', (socket) => {
-  console.log("connected!!" + socket.id);
+  console.log("connected!! " + socket.id);
+  listenForChannel(socket, io)
 
   socket.on('disconnect', () => {
-    console.log('Disconnected' + socket.id);
+    console.log('Disconnected ' + socket.id);
   })
 })
+
 
 app.get('/', (req, res) => {
   res.send('API is running...');

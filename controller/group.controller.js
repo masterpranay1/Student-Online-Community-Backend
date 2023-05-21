@@ -119,7 +119,7 @@ class GroupController {
   getAllChats = expressAsyncHandler(async (req, res) => {
     const { groupId } = req.params;
 
-    const groupExist = await Group.find({ groupId });
+    const groupExist = await Group.findOne({ groupId });
     if (!groupExist) {
       res.status(400);
       throw new Error('Group does not exists');
